@@ -1,0 +1,35 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+
+using namespace std;
+
+int main() {
+    vector<vector<int>> towers = {{1,2,5},{2,1,7},{3,1,9}};
+    int radius = 2;
+    int max_quality = 0;
+    vector<int> max_coord = {0, 0};
+    for (int x = 0; x <= 50; x++) {
+        for (int y = 0; y <= 50; y++) {
+            int quality = 0;
+            for (auto tower : towers) {
+                int dx = x - tower[0];
+                int dy = y - tower[1];
+                double distance = sqrt(dx*dx + dy*dy);
+                if (distance <= radius) {
+                    quality += tower[2] / (1 + distance);
+                }
+            }
+            if (quality > max_quality) {
+                max_quality = quality;
+                max_coord = {x, y};
+            } else if (quality == max_quality) {
+                if (x < max_coord[0] || (x == max_coord[0] && y < max_coord[1])) {
+                    max_coord = {x, y};
+                }
+            }
+        }
+    }
+    cout << max_coord[0] << " " << max_coord[1] << endl;
+    return 0;
+}
